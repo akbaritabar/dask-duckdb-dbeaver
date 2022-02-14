@@ -5,11 +5,12 @@
 
 I am going to briefly go over these topics:
 
-1. Why do we need to learn about parallelization and out of memory computation?
+0. Why do we need to learn about parallelization and out of memory computation?
+1. (if you are convinced), Required installation and set-up 
 2. Data preparation using Dask in Python
 3. Further processing and analyzing data with SQL, using DuckDB and DBeaver
 
-### 1. Why do we need to learn more about parallelization and out of memory computation?
+### 0. Why do we need to learn more about parallelization and out of memory computation?
 
 First thing that might come to mind is "*why do I need to bother with out of memory computing and parallelization when there is so much RAM available these days?*"
 
@@ -21,7 +22,7 @@ As a practical example, I am going to use ORCID 2019 researcher profiles that ar
 
 You can download the zipped file named "ORCID_2019_summaries.tar.gz", which is 10.76GB. Be patient for it to be unzipped since it includes one XML file per ORCID profile and will take a lot of time to unzip. Here I will show you only one folder with `500` XML files, but the same method and script below will allow you to process all of the 13 million profiles (you might need to do some error handling of course). 
 
-### 0. Required installation and set-up
+### 1. Required installation and set-up
 
 The following software have installation files for Windows/Linux/Mac. Please choose the one suitable for your operating system and install them. None of them require administrator privileges to be installed, hence you can use your personal laptop or work PC to install them.
 
