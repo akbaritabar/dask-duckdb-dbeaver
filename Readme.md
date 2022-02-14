@@ -21,6 +21,26 @@ As a practical example, I am going to use ORCID 2019 researcher profiles that ar
 
 You can download the zipped file named "ORCID_2019_summaries.tar.gz", which is 10.76GB. Be patient for it to be unzipped since it includes one XML file per ORCID profile and will take a lot of time to unzip. Here I will show you only one folder with `500` XML files, but the same method and script below will allow you to process all of the 13 million profiles (you might need to do some error handling of course). 
 
+### 0. Required installation and set-up
+
+The following software have installation files for Windows/Linux/Mac. Please choose the one suitable for your operating system and install them. None of them require administrator privileges to be installed, hence you can use your personal laptop or work PC to install them.
+
+- Please install Anaconda Python from: https://www.anaconda.com/products/individual
+    - Use the "yml" file in this directory named "required_environment.yml" and conda to create an environment with needed python libraries following points below
+    - After successful installation of python, open "Anaconda prompt" (doesn't need to be administrator) by going to windows start menu and searching it
+    - Uncomment the line suitable for your operating system in the "yml" file (line 8 for Unix users and line 6 for Windows users. Uncomment means, "delete the starting "#" sign in the line. If needed, change the directory in "yml" file based on where Anaconda Python is installed on your PC)).
+    - Change directory to where you have downloaded the "yml" file (e.g., run `cd Users\YOUR-USERNAME\Downloads\` on Windows)
+    - Run `conda env create -f required_environment.yml` (it will take a while to download and install the libraries, circa 5-15 minutes is normal depending on the system and internet speed)
+    - Check if the installation has been successful and environment is usable (run `conda env list` which should show you "base" and the new environment "daskduckdb". Then run `conda activate daskduckdb` and it should add this name into parenthesis before your prompt e.g., "(daskduckdb) ..."
+- Download the DuckDB CLI from: https://duckdb.org/docs/installation/
+- Install DBeaver from: https://dbeaver.io/download/
+- Clone (download) this repository from GitHub: https://github.com/akbaritabar/dask-duckdb-dbeaver
+- You can open jupyter lab by opening the "Anaconda prompt" and run `jupyter lab`
+- Now, the second code chunk in the jupyter notebook here (https://github.com/akbaritabar/dask-duckdb-dbeaver/blob/main/out_of_memory_ETL.ipynb) should run without a problem
+- You an open Dbeaver and follow the instructions here to create a connection to DuckDB (https://github.com/dbeaver/dbeaver/wiki/Create-Connection) or you can wait for us to do it together in the session (if you wished to do it, see point 8 below for a heads-up)
+- You need to establish a connection as DuckDB (DBeaver comes with the needed drivers, you need to create an empty .db (database) file, which you can do by downloading the CLI, calling e.g., duckdb.exe mydb.db for windows using CMD, or ./duckdb mydb.db on mac/linux terminal).
+
+
 ### 2. Data preparation using Dask in Python
 
 [**Dask**](https://dask.org/) is a Python library that allows you to use familiar data structures like Pandas data frame and Numpy array and process them in parallel. In addition, Dask comes with a set of functionalities that are very much helpful to parse unstructured data (i.e., text) using [*bag*](https://docs.dask.org/en/latest/bag.html) or to parallelize custom Python code through using [*futures*](https://docs.dask.org/en/latest/futures.html) or [*delayed*](https://docs.dask.org/en/latest/delayed.html) actions.
