@@ -26,6 +26,7 @@ You can download the zipped file named "ORCID_2019_summaries.tar.gz", which is 1
 
 The following software have installation files for Windows/Linux/Mac. Please choose the one suitable for your operating system and install them. None of them require administrator privileges to be installed, hence you can use your personal laptop or work PC to install them.
 
+- Clone (download) this repository from GitHub: https://github.com/akbaritabar/dask-duckdb-dbeaver
 - Please install Anaconda Python from: https://www.anaconda.com/products/individual
     - Use the "yml" file in this directory named "required_environment.yml" and conda to create an environment with needed python libraries following points below
     - After successful installation of python, open "Anaconda prompt" (doesn't need to be administrator) by going to windows start menu and searching it
@@ -35,20 +36,19 @@ The following software have installation files for Windows/Linux/Mac. Please cho
     - Check if the installation has been successful and environment is usable (run `conda env list` which should show you "base" and the new environment "daskduckdb". Then run `conda activate daskduckdb` and it should add this name into parenthesis before your prompt e.g., "(daskduckdb) ..."
 - Download the DuckDB CLI from: https://duckdb.org/docs/installation/
 - Install DBeaver from: https://dbeaver.io/download/
-- Clone (download) this repository from GitHub: https://github.com/akbaritabar/dask-duckdb-dbeaver
 - You can open jupyter lab by opening the "Anaconda prompt" and run `jupyter lab`
 - Now, the second code chunk in the jupyter notebook here (https://github.com/akbaritabar/dask-duckdb-dbeaver/blob/main/out_of_memory_ETL.ipynb) should run without a problem
-- You an open Dbeaver and follow the instructions here to create a connection to DuckDB (https://github.com/dbeaver/dbeaver/wiki/Create-Connection) or you can wait for us to do it together in the session (if you wished to do it, see point 8 below for a heads-up)
+- You can open Dbeaver and follow the instructions here to create a connection to DuckDB (https://github.com/dbeaver/dbeaver/wiki/Create-Connection) or you can wait for us to do it together in the session (if you wished to do it, see next point below for a heads-up)
 - You need to establish a connection as DuckDB (DBeaver comes with the needed drivers, you need to create an empty .db (database) file, which you can do by downloading the CLI, calling e.g., duckdb.exe mydb.db for windows using CMD, or ./duckdb mydb.db on mac/linux terminal).
 
 
 ### 2. Data preparation using Dask in Python
 
-[**Dask**](https://dask.org/) is a Python library that allows you to use familiar data structures like Pandas data frame and Numpy array and process them in parallel. In addition, Dask comes with a set of functionalities that are very much helpful to parse unstructured data (i.e., text) using [*bag*](https://docs.dask.org/en/latest/bag.html) or to parallelize custom Python code through using [*futures*](https://docs.dask.org/en/latest/futures.html) or [*delayed*](https://docs.dask.org/en/latest/delayed.html) actions.
+[**Dask**](https://dask.org/) is a Python library that allows you to use familiar data structures like Pandas dataframe and Numpy array and process them in parallel. In addition, Dask comes with a set of functionalities that are very much helpful to parse unstructured data (i.e., text) using [*bag*](https://docs.dask.org/en/latest/bag.html) or to parallelize custom Python code through using [*futures*](https://docs.dask.org/en/latest/futures.html) or [*delayed*](https://docs.dask.org/en/latest/delayed.html) actions.
 
-This was [the book](https://www.google.de/books/edition/Data_Science_with_Python_and_Dask/KTkzEAAAQBAJ?hl=en&gbpv=0) that walked me step by step to understand how Dask works and adopt it to my own use-case. Of course many videos and tutorials by the Dask team in ([https://examples.dask.org/applications/embarrassingly-parallel.html](https://examples.dask.org/applications/embarrassingly-parallel.html) make sure to see best practices [https://docs.dask.org/en/stable/best-practices.html](https://docs.dask.org/en/stable/best-practices.html)) was helpful as well.
+This was [the book](https://www.google.de/books/edition/Data_Science_with_Python_and_Dask/KTkzEAAAQBAJ?hl=en&gbpv=0) that walked me step by step to understand how Dask works and adopt it to my own use-case. Of course videos and tutorials by the Dask team were helpful as well, see them in ([https://examples.dask.org/applications/embarrassingly-parallel.html](https://examples.dask.org/applications/embarrassingly-parallel.html) and make sure to see the best practices [https://docs.dask.org/en/stable/best-practices.html](https://docs.dask.org/en/stable/best-practices.html)).
 
-Using above example, imagine having to parse millions of XML files, filter them, convert them into a tabular or structured form and export them into a file to analyse further. Here, each of those XML files are independent from each other and if you try to do them in a linear fashion, they will be processed in order, while you can process multiple of them simultaneously in parallel and at the end join the results to construct a big table or data frame (or array if you wish).
+Using above example, imagine having to parse millions of XML files, filter, and convert them into a tabular or structured form and export them into a file to analyse further. Here, each of those XML files are independent from each other and if you try to do them in a linear fashion, they will be processed in order, while you can process multiple of them simultaneously in parallel and at the end join the results to construct a big table or dataframe (or array if you wish).
 
 #### Example of parsing 500 XML files using Dask delayed
 
@@ -104,9 +104,9 @@ client
 # XMLs from: https://orcid.figshare.com/articles/dataset/ORCID_Public_Data_File_2019/9988322
 
 # orcid XML files (you need to change to your download directory)
-data_dir = os.path.join('/', 'XML_files')
+data_dir = os.path.join('XML_files')
 # results
-res_dir = os.path.join('/', 'output')
+res_dir = os.path.join('output')
 
 # ============================
 #### function to take scholar's info ####
@@ -162,7 +162,7 @@ parse_files = load_parse_delayed(filedir=data_dir)
     Process took this much minutes: 0.5291663845380147
 
 
-As you can see from the above, it took my machine `52` seconds to finish reading those 500 files, parsing and extracting the information.
+As you can see from the above, it took my machine `52` seconds to finish reading those 500 files, parse and extract the needed information.
 
 
 ```python
@@ -176,15 +176,15 @@ Here I am adding a screenshot of the Dask dashboard that is very useful in showi
 
 ### 3. Further processing and analysing data with SQL, using DuckDB and DBeaver
 
-Now that we are finished pre-processing our XML files (of course parsing all of ORCID snapshot will take longer depending on the machine you use and computing power), we can go ahead and use the data in our analysis. 
+Now that we are finished pre-processing our XML files (of course parsing all of the ORCID snapshot will take longer depending on the machine you use and computing power), we can go ahead and use the data in our analysis. 
 
-Dask is really powerful in analysis too and dask data frame is very similar to Pandas but it can read files that do not fit into the memory. It is much faster if you use file formats that allow chunking (e.g., parquet which is a column based format, see more: [https://en.wikipedia.org/wiki/Apache_Parquet](https://en.wikipedia.org/wiki/Apache_Parquet)).
+Dask is really powerful in analysis too and dask dataframe is very similar to Pandas and it can read files that do not fit into the memory. It is much faster if you use file formats that allow chunking (e.g., parquet which is a column based format, see more: [https://en.wikipedia.org/wiki/Apache_Parquet](https://en.wikipedia.org/wiki/Apache_Parquet)).
 
-In my case, exported files usually are about 100GB (more or less) and in general querying them in Python with or without Dask, takes long. I was introduced by a colleague (Thanks Tom) to [DuckDB](https://duckdb.org/) which is amazingly fast in handling large data files and works extremely fast with parquet format.
+In my case, exported files usually are about 100GB (more or less) and in general querying them in Python, with or without Dask, takes long. I was introduced by a colleague (thanks Tom) to [DuckDB](https://duckdb.org/) which is amazingly fast in handling large data files and works extremely fast with parquet format.
 
 It gives multiple interfaces (e.g., to connect and use it in Python, R or other languages) and I very much liked their command line interface that allows using `SQL` for your queries. This allows me (by keeping a coherent data structure and file/column naming) to use the same SQL scripts I have written before on the newly parsed data.
 
-To use DuckDB's CLI in a more structured way, I turned to [DBeaver](https://dbeaver.io/) which is an open source database manager tool. I just needed to establish a connection as DuckDB (DBeaver comes with the needed drivers, you need to create an empty `.db` (database) file, which you can do by downloading the CLI, calling e.g., `duckdb.exe mydb.db` for windows using CMD, or `./duckdb mydb.db` on mac/linux terminal). First I am using the pragma keywords to tell DuckDB how much RAM and parallel threads it can use and afterwards create views to my large parquet files (see example SQL script below) and then run my SQL scripts as usual.
+To use DuckDB's CLI in a more structured way, I turned to [DBeaver](https://dbeaver.io/) which is an open-source database manager tool. I just needed to establish a connection as DuckDB (DBeaver comes with the needed drivers, you need to create an empty `.db` (database) file, which you can do by downloading the CLI, calling e.g., `duckdb.exe mydb.db` for windows using CMD, or `./duckdb mydb.db` on mac/linux terminal). First I am using the pragma keywords to tell DuckDB how much RAM and parallel threads it can use and afterwards create views to my large parquet files (see example SQL script below) and then run my SQL scripts as usual.
 
 
 ```SQL
