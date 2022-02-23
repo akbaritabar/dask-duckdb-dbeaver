@@ -143,7 +143,7 @@ def load_parse_delayed(filedir):
         data_read = delayed(BeautifulSoup)(data, features="xml")
         data_normalized = delayed(orcid_files)(data_read)
         output_dfs.append(data_normalized)
-    dask_dds = dd.from_delayed(output_dfs).repartition(partition_size="100MB")
+    dask_dds = dd.from_delayed(output_dfs, meta=pd.DataFrame({"orcid_id":"", "first_name": "", "last_name": ""}, index=[0])).repartition(partition_size="100MB")
     dask_dds.to_parquet(path=os.path.join(res_dir),
                         engine='pyarrow', write_index=False)
     print('Dask data frame built and wrote to parquet!')
